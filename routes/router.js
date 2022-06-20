@@ -1,4 +1,5 @@
 const express = require('express');
+const generator = require('generate-password');
 
 const router = express.Router();
 const { readFile } = require('../helpers/readWriteFile');
@@ -17,6 +18,15 @@ router.get('/:id', async (req, res) => {
     res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   }
   res.status(200).json(palestrante);
+});
+
+router.post('/', async (req, res) => {
+  const token = generator.generate({
+    length: 16,
+    numbers: true,
+  });
+  console.log(token);
+  res.status(200).send({ token });
 });
 
 module.exports = {
