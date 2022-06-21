@@ -21,7 +21,17 @@ const writeFile = async (PATH_FILE, text) => {
   }
 };
 
+const deleteFile = async (PATH_FILE, text) => {
+    try {
+        await fs.writeFile(PATH_FILE, JSON.stringify(text));
+        return text;
+    } catch (err) {
+        console.log(`erro: ${err.message}`);
+    }
+};
+
 module.exports = {
    readFile,
    writeFile,
+   deleteFile,
 };

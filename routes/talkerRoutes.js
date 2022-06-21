@@ -3,7 +3,7 @@ const express = require('express');
 const routerTalker = express.Router();
 const { nameAuth } = require('../middleware/name_auth');
 const { tokenAuth } = require('../middleware/token_auth');
-const { readFile, writeFile } = require('../helpers/readWriteFile');
+const { readFile, writeFile, deleteFile } = require('../helpers/readWriteFile');
 const { ageAuth } = require('../middleware/age_auth');
 const { talkAuth } = require('../middleware/talk_auth');
 const { talkRate } = require('../middleware/talkRate_auth');
@@ -36,24 +36,12 @@ routerTalker
   res.status(201).json(palestrante);
 });
 
-routerTalker.delete('/:id', async (req, res) => {
-  const { authorization } = req.headers;
+routerTalker.delete('/:id', tokenAuth, async (req, res) => {
   const { id } = req.params;
   const arrayPalestrante = await readFile(jsonFile);
-  if (!authorization || authorization === undefined) {
-    return res.status(401).json({
-      message: 'Token não encontrado',
-    });
-  }
-
-  if (authorization !== 16) {
-    return res.status(401).json({
-      message: 'Token inválido',
-    });
-  }
   const palestrantes = JSON.parse(arrayPalestrante).filter((e) => e.id !== Number(id));
-  await writeFile(jsonFile, palestrantes);
-  return res.status(204);
+  await deleteFile(jsonFile, palestrantes);
+  return res.status(204).send(palestrantes);
 });
 
 module.exports = {
