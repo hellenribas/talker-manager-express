@@ -8,6 +8,20 @@ const readFile = async (PATH_FILE) => {
         console.log(`erro: ${e.message}`);
     }
 };
+
+const writeFile = async (PATH_FILE, text) => {
+  try {
+      const readFiles = await fs.readFile(PATH_FILE, 'utf8');
+      const file = (JSON.parse(readFiles));
+      file.push(text);
+      const newArray = JSON.stringify(file);
+      await fs.writeFile(PATH_FILE, newArray);
+  } catch (err) {
+      console.log(`erro: ${err.message}`);
+  }
+};
+
 module.exports = {
    readFile,
+   writeFile,
 };
