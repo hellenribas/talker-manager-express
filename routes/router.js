@@ -13,10 +13,13 @@ const { talkWatched } = require('../middleware/talkWatch_auth');
 const { emailAuth } = require('../middleware/login_auth');
 const { passwordAuth } = require('../middleware/password_auth');
 const { talkerPut } = require('../services/talkerPut');
+const { searchAuth } = require('../middleware/searchAuth');
 
 const router = express.Router();
 
 router.get('/talker', talkers);
+
+router.get('/talker/search', tokenAuth, searchAuth);
 
 router.get('/talker/:id', talkerId);
 
@@ -28,7 +31,6 @@ router.post('/login', emailAuth, passwordAuth, async (_req, res) => {
     length: 16,
     numbers: true,
   });
-  console.log(token);
   res.status(200).send({ token });
 });
 
